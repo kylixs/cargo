@@ -419,6 +419,10 @@ pub fn configure_http_handle(config: &Config, handle: &mut Easy) -> CargoResult<
     if let Some(check) = config.get_bool("http.check-revoke")? {
         handle.ssl_options(SslOpt::new().no_revoke(!check.val))?;
     }
+    if let Some(verify) = config.get_bool("http.verify-ssl")? {
+        handle.ssl_verify_host(verify.val)?;
+        handle.ssl_verify_peer(verify.val)?;
+    }
     if let Some(user_agent) = config.get_string("http.user-agent")? {
         handle.useragent(&user_agent.val)?;
     } else {
